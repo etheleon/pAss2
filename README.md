@@ -1,6 +1,6 @@
 # Introduction
 
-Continuation analysis tools from (pAss)[https://github.com/etheleon/pAss], a gene centric assembly tool but written in python
+Continuation analysis tools from [pAss](https://github.com/etheleon/pAss), a gene centric assembly tool but written in python
 
 ## Shannon Entropy
 
