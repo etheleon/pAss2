@@ -2,6 +2,7 @@
 #investigate how diverse are the sequences from position 0 to N in the MDR region
 
 #import matplotlib.pyplot as plt
+from __future__ import division
 import feather
 import argparse
 import re
@@ -38,7 +39,27 @@ class mdrSeqAnalysis:
                     self.mdr[record.id] = str(record.seq)
             logging.info("Total {} mdrs observed".format(len(self.mdr)))
         else:
-            raise IOException('{} Files {} and {} does not exist:'.format(self.ko, self.mdrFile, self.msaFile))
+            raise IOError('{} Files {} and {} does not exist:'.format(self.ko, self.mdrFile, self.msaFile))
+
+    def msaLoc(self):
+        contigIDs =[]
+        start = []
+        end = []
+        for record in SeqIO.parse(self.msaFile, "fasta"):
+            sequence = str(record.seq)
+            #print(record.id)
+            headtails   = re.compile("^(-*)\S+[A-Za-z](-*)$")
+            regex       = headtails.search(sequence)
+            contigIDs.append(record.id)
+            start.append(len(regex.group(1)))
+            end.append(len(sequence) - len(regex.group(2)))
+        return pd.DataFrame({
+        "contigID": contigIDs,
+        "start": start,
+        "end":end,
+        "msaS" : self.msaStart,
+        "msaE" : self.msaEnd
+        })
 
     def spanDF(self):
         '''
